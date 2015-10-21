@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "type": "cat",
+      "id": "1",
+      "attributes": {
+        "color": "black",
+        "age": 12
+      }
+    },
+    {
+      "type": "cat",
+      "id": "2",
+      "attributes": {
+        "color": "grey",
+        "age": 2
+      }
+    },
+    {
+      "type": "cat",
+      "id": "3",
+      "attributes": {
+        "color": "white",
+        "age": 5
+      }
+    }
+  ]
+}

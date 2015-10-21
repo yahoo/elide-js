@@ -1,0 +1,15 @@
+{
+  "preset": "google",
+  "esnext": true,
+  "maximumLineLength": {
+    "value": 90,
+    "tabSize": 2,
+    "allowRegex": true,
+    "allowComments": true,
+    "allExcept": ["regex", "comments", "require", "functionSignature"]
+  },
+  "excludeFiles": [
+    "build/**",
+    "*.md"
+  ]
+}

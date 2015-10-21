@@ -1,0 +1,17 @@
+{
+  "data": {
+    "type": "person",
+    "id": "1",
+    "attributes": {
+      "name": "John"
+    },
+    "relationships": {
+      "pets": {
+        "data": [
+          {"type": "pet", "id": "1"},
+          {"type": "pet", "id": "2"}
+        ]
+      }
+    }
+  }
+}

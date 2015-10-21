@@ -1,0 +1,10 @@
+{
+  "data": {
+    "type": "cat",
+    "id": "1",
+    "attributes": {
+        "color": "black",
+        "age": 12
+    }
+  }
+}

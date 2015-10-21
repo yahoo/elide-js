@@ -1,0 +1,20 @@
+{
+  "data": {
+    "type": "person",
+    "id": "2",
+    "attributes": {
+      "name": "Cortana"
+    },
+    "relationships": {
+      "bike": {
+        "data": {"type": "bicycle", "id": "1"}
+      },
+      "pets": {
+        "data": [
+          {"type": "pet", "id": "1"},
+          {"type": "pet", "id": "2"}
+        ]
+      }
+    }
+  }
+}

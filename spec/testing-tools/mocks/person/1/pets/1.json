@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "pet",
+    "id": "1",
+    "attributes": {
+      "type": "dog",
+      "name": "spot",
+      "age": 4
+    },
+    "relationships": {
+      "owner": {
+        "data": {
+          "type": "person",
+          "id": "1"
+        }
+      }
+    }
+  }
+}

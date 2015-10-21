@@ -1,0 +1,17 @@
+{
+  "node": true,
+  "mocha": true,
+  "esnext": true,
+
+  "bitwise": true,
+  "curly": true,
+  "eqeqeq": true,
+  "freeze": true,
+  "futurehostile": true,
+  "latedef": "nofunc",
+  "maxcomplexity": 15,
+  "noarg": true,
+  "undef": true,
+  "unused": "vars",
+  "strict": true
+}

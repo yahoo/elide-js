@@ -1,0 +1,7 @@
+spec/
+.editorconfig
+.jscsrc
+.jshintrc
+.validate.json
+gulpfile.js
+screwdriver.yaml
