@@ -46,7 +46,6 @@
     "gulp-jscs-stylish": "~1.1.0",
     "gulp-jshint": "^1.11.2",
     "gulp-mocha": "^2.1.2",
-    "gulp-nodemon": "^2.0.3",
     "gulp-webpack": "^1.5.0",
     "inherits": "^2.0.1",
     "isparta": "^3.0.3",
