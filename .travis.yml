@@ -1,0 +1,19 @@
+---
+  language: node_js
+  node_js:
+    - node
+    - '4.1'
+    - '4.0'
+    - '0.12'
+    - '0.10'
+
+  # build steps
+  before_deploy:
+    - npm run build
+  deploy:
+    provider: npm
+    email: clayreimann@gmail.com
+    api_key:
+      secure: rg2vb+7lXpUaL1Bsp2XXZhVNnc/l93vrzsXLPmsg/0+2WxQI7A2J2P/+ubJkpgiUsKfcT5G+42aQCQ1ThPfqd6df+h2mk0jYGkRLsiSaI1Pzn6Nscq/eSVr83AfjRq/uNplTim+XA7e4uw8HhVyas6vaMKcZ2g7ibzjeiSgEKmqLYhI6wIv0b342+ojmvXVW6z+y/2JU8ELoC5WEYk5ulA7OpnI2IU1lhh71CRaor0ZV1c3pOFafBuMhPDYP+9KdFzXazclG9i7rZNO2MO/APeohzNHUVY84uiTxFbEKBfEHQ6WrYcWiASFPey0YkNA37aHilf9KjxCSVRLgED4uXbBZCs7j4r5j77B7i7M3sMkwLJ76aJDJo9gvAtF7LZqlSvoVezqxuZN5zShM/LWrTmTykAsS8D/QKRYco6pHGlic4Wp0kBwD7s1ui9qCV+F7+pbwoikqjjMusxv6bfqUk2q/W0SlWQoDTT5Xt8De9RG05Gr+YAx4L3a5dG4hREoPoE0OWhpTfWSt4Ale8Ps333GjbURw/iSHLUTBI2A/QJWWuPY3QPoDbaCSVRnClS2IfoQ9ZfmiSbbphKUbESPPS7ys7z6LQijer3lsQe/SaIA+1EG/mFjelh2SOw/kc8TxPRJRWnROHuhFGWwWNKgDoZlLuTsZTt6fc6eClRn93eg=
+    on:
+      tags: true
