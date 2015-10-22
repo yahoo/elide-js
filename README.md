@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/yahoo/elide-js.svg?branch=master)](https://travis-ci.org/yahoo/elide-js)
+
 Elide
 ===============
 Elide is a library that makes it easy to talk to a [JSON API](http://jsonapi.org/format) compliant backend.
@@ -9,7 +11,7 @@ in ES6, but the distributed code is ES5 so you can run it without any other supp
 
 ## Getting Started
 ```
-npm install elide
+npm install elide-js
 ```
 
 Elide is tested on:
