@@ -183,7 +183,7 @@ function deleteObject(request, response) {
   respondWith(response, 204, '');
 }
 
-http.createServer(function(request, response) {
+module.exports = http.createServer(function(request, response) {
   if (!request.headers['content-type'] ||
       !request.headers['content-type'].search('application/vnd.api+json')) {
     respondWith(response, 415, '{"error": "Invalid Content-Type"}');
@@ -222,4 +222,4 @@ http.createServer(function(request, response) {
       break;
   }
 
-}).listen(1337);
+});

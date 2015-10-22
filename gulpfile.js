@@ -13,8 +13,8 @@ var webpack       = require('gulp-webpack');
 // testing
 var isparta       = require('isparta');
 var istanbul      = require('gulp-istanbul');
-var nodemon       = require('gulp-nodemon');
-var NODEMON;
+var testServer    = require('./spec/testing-tools/mock-server');
+var SERVER;
 
 // random
 var open          = require('open');
@@ -27,10 +27,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('mock', function() {
-  NODEMON = nodemon({
-    script: 'spec/testing-tools/mock-server.js',
-    watch: ['spec/testing-tools/mock-server.js']
-  });
+  SERVER = testServer.listen(1337);
 });
 
 gulp.task('test:tdd', function() {
@@ -68,11 +65,10 @@ gulp.task('test', ['mock'], function(done) {
           reporters: ['lcov', 'json', 'html', 'text']
         }))
         .on('end', function() {
-          NODEMON ? NODEMON.emit('quit') : null;
+          SERVER.close(done);
           if (process.env.OPEN) {
             open(__dirname + '/artifacts/coverage/index.html');
           }
-          done();
         });
     });
 });

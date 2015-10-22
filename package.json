@@ -1,5 +1,5 @@
 {
-  "name": "Elide",
+  "name": "elide-js",
   "description": "Talk to a JSON API compliant server",
   "license": "Apache-2.0",
   "authors": "Clay Reimann <clayreimann@yahoo-inc.com>",
@@ -13,9 +13,9 @@
   "browser": "build/web/elide.js",
   "scripts": {
     "clean": "rm -rf node_modules build artifacts out",
-    "lint": "gulp lint",
-    "test": "gulp test",
-    "build": "gulp build"
+    "lint": "node_modules/.bin/gulp lint",
+    "test": "node_modules/.bin/gulp test",
+    "build": "node_modules/.bin/gulp build"
   },
   "bugs": {
     "url": "https://github.com/yahoo/elide-js/issues"
@@ -46,7 +46,6 @@
     "gulp-jscs-stylish": "~1.1.0",
     "gulp-jshint": "^1.11.2",
     "gulp-mocha": "^2.1.2",
-    "gulp-nodemon": "^2.0.3",
     "gulp-webpack": "^1.5.0",
     "inherits": "^2.0.1",
     "isparta": "^3.0.3",
