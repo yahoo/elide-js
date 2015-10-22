@@ -15,8 +15,10 @@ npm install elide-js
 ```
 
 Elide is tested on:
-  * node10
-  * node12
+  * node 4.1.x
+  * node 4.0.x
+  * node 0.12.x
+  * node 0.10.x
 
 ## Usage
 
