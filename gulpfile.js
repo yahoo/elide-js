@@ -14,6 +14,7 @@ var webpack       = require('gulp-webpack');
 var isparta       = require('isparta');
 var istanbul      = require('gulp-istanbul');
 var testServer    = require('./spec/testing-tools/mock-server');
+var stubby        = require('gulp-stubby-server');
 var SERVER;
 
 // random
@@ -117,4 +118,14 @@ gulp.task('build:server', function() {
   return gulp.src('./lib/**/*.js')
     .pipe(babel())
     .pipe(gulp.dest('./build/node'));
+});
+
+gulp.task('stubby', function(cb) {
+  var options = {
+    files: [
+      'mocks/*.{json,yaml,js}'
+    ]
+  };
+
+  stubby(options, cb);
 });
