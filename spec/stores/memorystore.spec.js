@@ -988,7 +988,37 @@ describe('MemoryDatastore', function() {
 
   describe('upstream', function() {
 
-    it('should read from upstream after ttl');
+    it('should read from upstream after ttl', function(done) {
+      var ms1 = new MemoryDatastore(ES6Promise, 0, undefined, simpleModels);
+      var ms2 = new MemoryDatastore(ES6Promise, undefined, undefined, simpleModels);
+      ms1.setUpstream(ms2);
+      sinon.spy(ms2, 'find');
+
+      var cat = {color: 'black', age: 2};
+      ms2.create('cat', cat).then(function(createdCat) {
+        cat = createdCat;
+
+      }).then(function() {
+        var q = new Query(ms1, 'cat', cat.id);
+        return ms1.find(q);
+
+      }).then(function(foundCat) {
+        expect(foundCat).to.deep.equal(cat);
+
+        var q = new Query(ms1, 'cat', cat.id);
+        return new ES6Promise(function(resolve, reject) {
+          setTimeout(function() {
+            ms1.find(q).then(resolve);
+          }, 250);
+        });
+
+      }).then(function(foundCat) {
+        expect(foundCat).to.deep.equal(cat);
+        expect(ms2.find.callCount).to.equal(2);
+
+        done();
+      }).catch(done);
+    });
 
     it('should read from upstream if it does not have data locally', function(done) {
       var ms1 = new MemoryDatastore(ES6Promise, undefined, undefined, simpleModels);
