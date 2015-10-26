@@ -94,6 +94,36 @@ describe('JsonApiDatastore', function() {
     }
   };
 
+  var booksAndAuthorsURL = 'http://localhost:4080';
+  var booksAndAuthorsModels = {
+    book: {
+      meta: {
+        store: 'jsonapi',
+        isRootObject: true
+      },
+
+      title: 'string',
+      language: 'string',
+      genre: 'string',
+
+      links: {
+        author: {
+          model: 'author',
+          type: 'hasMany',
+          inverse: 'book'
+        }
+      }
+    },
+    author: {
+      meta: {
+        store: 'jsonapi',
+        isRootObject: true
+      },
+
+      name: 'string'
+    }
+  };
+
   describe('initalize', function() {
     it('should initalize cleanly', function() {
       expect(function() {
@@ -201,6 +231,18 @@ describe('JsonApiDatastore', function() {
                                               .replace('${nextModel}', 'person')
                                               .replace('${id}', 1));
     });
+    //
+    //it('should fetch a person\'s name only', function(done) {
+    //  var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
+    //
+    //  var q = new Query(store, 'book', 1, {fields: {book: ['title', 'genre']}});
+    //  store.find(q).then(function(result) {
+    //    console.log("***");
+    //    console.log(result);
+    //    console.log("***");
+    //    done();
+    //  }).catch(done);
+    //});
   });
 
   describe('#create', function() {

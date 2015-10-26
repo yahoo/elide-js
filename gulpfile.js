@@ -16,6 +16,7 @@ var istanbul      = require('gulp-istanbul');
 var testServer    = require('./spec/testing-tools/mock-server');
 var stubby        = require('gulp-stubby-server');
 var SERVER;
+var stubbyServer;
 
 // random
 var open          = require('open');
@@ -27,8 +28,11 @@ gulp.task('lint', function() {
     .pipe(jscs());
 });
 
-gulp.task('mock', function() {
+gulp.task('mock', function(cb) {
   SERVER = testServer.listen(1337);
+
+  var options = { files: ['mocks/*.{json,yaml,js}'] };
+  stubbyServer = stubby(options, cb);
 });
 
 gulp.task('test:tdd', function() {
@@ -67,6 +71,7 @@ gulp.task('test', ['mock'], function(done) {
         }))
         .on('end', function() {
           SERVER.close(done);
+          stubbyServer.stop();
           if (process.env.OPEN) {
             open(__dirname + '/artifacts/coverage/index.html');
           }
