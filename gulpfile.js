@@ -120,12 +120,9 @@ gulp.task('build:server', function() {
     .pipe(gulp.dest('./build/node'));
 });
 
-gulp.task('stubby', function(cb) {
+gulp.task('stubby', ['build:web_debug'], function(cb) {
   var options = {
-    files: [
-      'mocks/*.{json,yaml,js}'
-    ]
+    files: ['mocks/*.{json,yaml,js}']
   };
-
   stubby(options, cb);
 });
