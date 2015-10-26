@@ -94,7 +94,7 @@ describe('JsonApiDatastore', function() {
     }
   };
 
-  var booksAndAuthorsURL = 'http://localhost:4080';
+  var booksAndAuthorsURL = 'http://localhost:8882';
   var booksAndAuthorsModels = {
     book: {
       meta: {
@@ -120,7 +120,9 @@ describe('JsonApiDatastore', function() {
         isRootObject: true
       },
 
-      name: 'string'
+      name: 'string',
+
+      links: {}
     }
   };
 
@@ -231,18 +233,17 @@ describe('JsonApiDatastore', function() {
                                               .replace('${nextModel}', 'person')
                                               .replace('${id}', 1));
     });
-    //
-    //it('should fetch a person\'s name only', function(done) {
-    //  var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
-    //
-    //  var q = new Query(store, 'book', 1, {fields: {book: ['title', 'genre']}});
-    //  store.find(q).then(function(result) {
-    //    console.log("***");
-    //    console.log(result);
-    //    console.log("***");
-    //    done();
-    //  }).catch(done);
-    //});
+
+    it('should only fetch title and genre and not language', function() {
+      var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
+
+      var q = new Query(store, 'book', 1, {fields: {book: ['title', 'genre']}});
+      store.find(q).then(function(result) {
+        expect(result).to.not.have.property('language');
+        expect(result).to.have.property('title');
+        expect(result).to.have.property('genre');
+      });
+    });
   });
 
   describe('#create', function() {
