@@ -15,7 +15,9 @@ var isparta       = require('isparta');
 var istanbul      = require('gulp-istanbul');
 var testServer    = require('./spec/testing-tools/mock-server');
 var stubby        = require('gulp-stubby-server');
-var SERVER;
+var proxyServer   = require('gulp-express');
+
+var mockServer;
 var stubbyServer;
 
 // random
@@ -29,7 +31,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('mock', function(cb) {
-  SERVER = testServer.listen(1337);
+  mockServer = testServer.listen(1337);
 
   var options = { files: ['mocks/*.{json,yaml,js}'] };
   stubbyServer = stubby(options, cb);
@@ -70,7 +72,7 @@ gulp.task('test', ['mock'], function(done) {
           reporters: ['lcov', 'json', 'html', 'text']
         }))
         .on('end', function() {
-          SERVER.close(done);
+          mockServer.close(done);
           stubbyServer.stop();
           if (process.env.OPEN) {
             open(__dirname + '/artifacts/coverage/index.html');
@@ -125,9 +127,8 @@ gulp.task('build:server', function() {
     .pipe(gulp.dest('./build/node'));
 });
 
-gulp.task('stubby', ['build:web_debug'], function(cb) {
-  var options = {
-    files: ['mocks/*.{json,yaml,js}']
-  };
-  stubby(options, cb);
+gulp.task('proxy-server', ['build:web_debug'], function() {
+  gulp.src('mocks/index.html')
+    .pipe(gulp.dest('./build/web'));
+  proxyServer.run(['spec/testing-tools/proxy-server.js']);
 });
