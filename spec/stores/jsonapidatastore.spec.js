@@ -126,6 +126,36 @@ describe('JsonApiDatastore', function() {
     }
   };
 
+  var booksAndAuthorsModelsNoGenre = {
+    book: {
+      meta: {
+        store: 'jsonapi',
+        isRootObject: true
+      },
+
+      title: 'string',
+      language: 'string',
+
+      links: {
+        author: {
+          model: 'author',
+          type: 'hasMany',
+          inverse: 'book'
+        }
+      }
+    },
+    author: {
+      meta: {
+        store: 'jsonapi',
+        isRootObject: true
+      },
+
+      name: 'string',
+
+      links: {}
+    }
+  };
+
   describe('initalize', function() {
     it('should initalize cleanly', function() {
       expect(function() {
@@ -242,6 +272,17 @@ describe('JsonApiDatastore', function() {
         expect(result).to.not.have.property('language');
         expect(result).to.have.property('title');
         expect(result).to.have.property('genre');
+      });
+    });
+
+    it('should only fetch title and language and not genre', function() {
+      var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModelsNoGenre);
+
+      var q = new Query(store, 'book', 1);
+      store.find(q).then(function(result) {
+        expect(result).to.not.have.property('genre');
+        expect(result).to.have.property('title');
+        expect(result).to.have.property('language');
       });
     });
   });
