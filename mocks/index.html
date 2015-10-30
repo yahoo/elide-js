@@ -1,0 +1,59 @@
+<html>
+<head>
+  <title>Elide-js Test Page</title>
+  <script src="elide.js"></script>
+</head>
+<body bgcolor=white>
+
+<script type="application/javascript">
+  var schema = {
+    stores: {
+      memory: {
+        type: 'memory',
+        upstream: "jsonapi",
+        ttl: 60000
+      },
+      jsonapi: {
+        type: 'jsonapi',
+        baseURL: 'http://localhost:8882'
+      }
+    },
+    models: {
+      book: {
+        meta: {
+          store: 'jsonapi',
+          isRootObject: true
+        },
+
+        title: 'string',
+        language: 'string',
+        genre: 'string',
+
+        links: {
+          author: {
+            model: 'author',
+            type: 'hasMany',
+            inverse: 'book'
+          }
+        }
+      },
+      author: {
+        meta: {
+          store: 'jsonapi',
+          isRootObject: true
+        },
+
+        name: 'string'
+      }
+    }
+  };
+
+  var options = {
+    promise: Promise
+  };
+
+  var elide = new Elide.default(schema, options);
+</script>
+
+</body>
+</html>

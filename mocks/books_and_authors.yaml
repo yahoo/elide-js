@@ -1,0 +1,563 @@
+- request:
+    url: ^/$
+    method: GET
+  response:
+    - status: 200
+      file: mocks/index.html
+
+- request:
+    url: ^/elide.js$
+    method: GET
+  response:
+    - status: 200
+      file: build/web/elide.js
+
+- request:
+    url: ^/book?/$
+    query:
+      include: authors
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": [
+            {
+              "type": "book",
+              "id": "1",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "language": "English",
+                "title": "The Old Man and the Sea"
+              },
+              "relationships": {
+                "authors": {
+                  "data": [
+                    {
+                      "type": "author",
+                      "id": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "book",
+              "id": "2",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "language": "English",
+                "title": "For Whom the Bell Tolls"
+              },
+              "relationships": {
+                "authors": {
+                  "data": [
+                    {
+                      "type": "author",
+                      "id": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "book",
+              "id": "3",
+              "attributes": {
+                "genre": "Science Fiction",
+                "language": "English",
+                "title": "Enders Game"
+              },
+              "relationships": {
+                "authors": {
+                  "data": [
+                    {
+                      "type": "author",
+                      "id": "2"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "included": [
+            {
+              "type": "author",
+              "id": "1",
+              "attributes": {
+                "name": "Ernest Hemingway"
+              },
+              "relationships": {
+                "books": {
+                  "data": [
+                    {
+                      "type": "book",
+                      "id": "1"
+                    },
+                    {
+                      "type": "book",
+                      "id": "2"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "author",
+              "id": "2",
+              "attributes": {
+                "name": "Orson Scott Card"
+              },
+              "relationships": {
+                "books": {
+                  "data": [
+                    {
+                      "type": "book",
+                      "id": "3"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+
+- request:
+    url: ^/book$
+    query:
+      include: authors
+      fields[book]: title,genre
+      fields[author]: name
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": [
+            {
+              "type": "book",
+              "id": "1",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "title": "The Old Man and the Sea"
+              }
+            },
+            {
+              "type": "book",
+              "id": "2",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "title": "For Whom the Bell Tolls"
+              }
+            },
+            {
+              "type": "book",
+              "id": "3",
+              "attributes": {
+                "genre": "Science Fiction",
+                "title": "Enders Game"
+              }
+            }
+          ],
+          "included": [
+            {
+              "type": "author",
+              "id": "1",
+              "attributes": {
+                "name": "Ernest Hemingway"
+              }
+            },
+            {
+              "type": "author",
+              "id": "2",
+              "attributes": {
+                "name": "Orson Scott Card"
+              }
+            }
+          ]
+        }
+
+- request:
+    url: ^/book$
+    query:
+      fields[book]: title,genre
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": [
+            {
+              "type": "book",
+              "id": "1",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "title": "The Old Man and the Sea"
+              }
+            },
+            {
+              "type": "book",
+              "id": "2",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "title": "For Whom the Bell Tolls"
+              }
+            },
+            {
+              "type": "book",
+              "id": "3",
+              "attributes": {
+                "genre": "Science Fiction",
+                "title": "Enders Game"
+              }
+            }
+          ]
+        }
+
+- request:
+    url: ^/book$
+    query:
+      include: authors
+      fields[book]: title,genre
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": [
+            {
+              "type": "book",
+              "id": "1",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "title": "The Old Man and the Sea"
+              }
+            },
+            {
+              "type": "book",
+              "id": "2",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "title": "For Whom the Bell Tolls"
+              }
+            },
+            {
+              "type": "book",
+              "id": "3",
+              "attributes": {
+                "genre": "Science Fiction",
+                "title": "Enders Game"
+              }
+            }
+          ],
+          "included": [
+            {
+              "type": "author",
+              "id": "1"
+            },
+            {
+              "type": "author",
+              "id": "2"
+            }
+          ]
+        }
+
+- request:
+    url: ^/book/1$
+    query:
+      fields[book]: title,genre
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": {
+            "type": "book",
+            "id": "1",
+            "attributes": {
+              "genre": "Literary Fiction",
+              "title": "The Old Man and the Sea"
+            }
+          }
+        }
+
+- request:
+    url: ^/book/1$
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": {
+            "type": "book",
+            "id": "1",
+            "attributes": {
+              "genre": "Literary Fiction",
+              "language": "English",
+              "title": "The Old Man and the Sea"
+            },
+            "relationships": {
+              "authors": {
+                "data": [
+                  {
+                    "type": "author",
+                    "id": "1"
+                  }
+                ]
+              }
+            }
+          }
+        }
+
+- request:
+    url: ^/book/2$
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": {
+            "type": "book",
+            "id": "2",
+            "attributes": {
+              "genre": "Literary Fiction",
+              "language": "English",
+              "title": "For Whom the Bell Tolls"
+            },
+            "relationships": {
+              "authors": {
+                "data": [
+                  {
+                    "type": "author",
+                    "id": "1"
+                  }
+                ]
+              }
+            }
+          }
+        }
+
+- request:
+    url: ^/book/3$
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": {
+            "type": "book",
+            "id": "3",
+            "attributes": {
+              "genre": "Science Fiction",
+              "language": "English",
+              "title": "Enders Game"
+            },
+            "relationships": {
+              "authors": {
+                "data": [
+                  {
+                    "type": "author",
+                    "id": "2"
+                  }
+                ]
+              }
+            }
+          }
+        }
+
+- request:
+    url: ^/book?/$
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": [
+            {
+              "type": "book",
+              "id": "1",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "language": "English",
+                "title": "The Old Man and the Sea"
+              },
+              "relationships": {
+                "authors": {
+                  "data": [
+                    {
+                      "type": "author",
+                      "id": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "book",
+              "id": "2",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "language": "English",
+                "title": "For Whom the Bell Tolls"
+              },
+              "relationships": {
+                "authors": {
+                  "data": [
+                    {
+                      "type": "author",
+                      "id": "1"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "book",
+              "id": "3",
+              "attributes": {
+                "genre": "Science Fiction",
+                "language": "English",
+                "title": "Enders Game"
+              },
+              "relationships": {
+                "authors": {
+                  "data": [
+                    {
+                      "type": "author",
+                      "id": "2"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+
+- request:
+    url: ^/author/1$
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": {
+            "type": "author",
+            "id": "1",
+            "attributes": {
+              "name": "Ernest Hemingway"
+            },
+            "relationships": {
+              "books": {
+                "data": [
+                  {
+                    "type": "book",
+                    "id": "1"
+                  },
+                  {
+                    "type": "book",
+                    "id": "2"
+                  }
+                ]
+              }
+            }
+          }
+        }
+
+- request:
+    url: ^/author/2$
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": {
+            "type": "author",
+            "id": "2",
+            "attributes": {
+              "name": "Orson Scott Card"
+            },
+            "relationships": {
+              "books": {
+                "data": [
+                  {
+                    "type": "book",
+                    "id": "3"
+                  }
+                ]
+              }
+            }
+          }
+        }
+
+- request:
+    url: ^/author$
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": [
+            {
+              "type": "author",
+              "id": "1",
+              "attributes": {
+                "name": "Ernest Hemingway"
+              },
+              "relationships": {
+                "books": {
+                  "data": [
+                    {
+                      "type": "book",
+                      "id": "1"
+                    },
+                    {
+                      "type": "book",
+                      "id": "2"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "author",
+              "id": "2",
+              "attributes": {
+                "name": "Orson Scott Card"
+              },
+              "relationships": {
+                "books": {
+                  "data": [
+                    {
+                      "type": "book",
+                      "id": "3"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }

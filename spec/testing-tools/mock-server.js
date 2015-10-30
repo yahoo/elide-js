@@ -29,6 +29,9 @@ var BASE = path.join(process.cwd(), 'spec/testing-tools/mocks');
 function fileForUrl(url, collections) {
   var extension;
 
+  if (url.indexOf('?') !== -1) {
+    url = url.slice(0, url.indexOf('?'));
+  }
   url = url.slice('/api/'.length);
   extension = url.charAt(url.length - 1) === '/' ? '' : '.json';
   if (collections && url.charAt(url.length - 1) === '/') {

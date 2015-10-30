@@ -94,6 +94,68 @@ describe('JsonApiDatastore', function() {
     }
   };
 
+  var booksAndAuthorsURL = 'http://localhost:8882';
+  var booksAndAuthorsModels = {
+    book: {
+      meta: {
+        store: 'jsonapi',
+        isRootObject: true
+      },
+
+      title: 'string',
+      language: 'string',
+      genre: 'string',
+
+      links: {
+        author: {
+          model: 'author',
+          type: 'hasMany',
+          inverse: 'book'
+        }
+      }
+    },
+    author: {
+      meta: {
+        store: 'jsonapi',
+        isRootObject: true
+      },
+
+      name: 'string',
+
+      links: {}
+    }
+  };
+
+  var booksAndAuthorsModelsNoGenre = {
+    book: {
+      meta: {
+        store: 'jsonapi',
+        isRootObject: true
+      },
+
+      title: 'string',
+      language: 'string',
+
+      links: {
+        author: {
+          model: 'author',
+          type: 'hasMany',
+          inverse: 'book'
+        }
+      }
+    },
+    author: {
+      meta: {
+        store: 'jsonapi',
+        isRootObject: true
+      },
+
+      name: 'string',
+
+      links: {}
+    }
+  };
+
   describe('initalize', function() {
     it('should initalize cleanly', function() {
       expect(function() {
@@ -200,6 +262,28 @@ describe('JsonApiDatastore', function() {
                                               .replace('${model}', 'pet')
                                               .replace('${nextModel}', 'person')
                                               .replace('${id}', 1));
+    });
+
+    it('should only fetch title and genre and not language', function() {
+      var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
+
+      var q = new Query(store, 'book', 1, {fields: {book: ['title', 'genre']}});
+      store.find(q).then(function(result) {
+        expect(result).to.not.have.property('language');
+        expect(result).to.have.property('title');
+        expect(result).to.have.property('genre');
+      });
+    });
+
+    it('should only fetch title and language and not genre', function() {
+      var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModelsNoGenre);
+
+      var q = new Query(store, 'book', 1);
+      store.find(q).then(function(result) {
+        expect(result).to.not.have.property('genre');
+        expect(result).to.have.property('title');
+        expect(result).to.have.property('language');
+      });
     });
   });
 

@@ -39,13 +39,16 @@
     "chai": "^3.0.0",
     "chai-as-promised": "^5.1.0",
     "es6-promise": "^2.3.0",
+    "express": "^4.13.3",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.1.0",
+    "gulp-express": "^0.3.5",
     "gulp-istanbul": "^0.10.0",
     "gulp-jscs": "^1.6.0",
     "gulp-jscs-stylish": "~1.1.0",
     "gulp-jshint": "^1.11.2",
     "gulp-mocha": "^2.1.2",
+    "gulp-stubby-server": "^0.1.5",
     "gulp-webpack": "^1.5.0",
     "inherits": "^2.0.1",
     "isparta": "^3.0.3",
@@ -53,6 +56,8 @@
     "mocha": "^2.2.5",
     "mocha-junit-reporter": "^1.5.0",
     "open": "0.0.5",
-    "sinon": "~1.15.4"
+    "proxy-middleware": "^0.15.0",
+    "sinon": "~1.15.4",
+    "url": "^0.11.0"
   }
 }
