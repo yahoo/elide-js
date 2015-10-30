@@ -108,11 +108,9 @@ describe('Datastore', function() {
         expect(promise).to.be.an.instanceof(ES6Promise);
       });
 
-      it('should throw an error if no _' + method + ' function exists', function() {
+      it('should throw an error if no ' + method + ' function exists', function() {
         var store = new Datastore(ES6Promise, undefined, undefined, {});
-        expect(function() {
-          store[method]('model', {});
-        }).to.throw(DATASTORE['ERROR_NO_' + method.toUpperCase()]);
+        expect(store[method]('model', {})).to.eventually.be.rejectedWith('Not implemented');
       });
     });
 
@@ -138,12 +136,10 @@ describe('Datastore', function() {
       }).to.throw(DATASTORE.ERROR_MUST_FIND_QUERY);
     });
 
-    it('should throw an error if no _find function exists', function() {
+    it('should throw an error if no find function exists', function() {
       var ds = new Datastore(ES6Promise, undefined, undefined, {});
       var q = new Query(ds, 'model', 1);
-      expect(function() {
-        ds.find(q);
-      }).to.throw(DATASTORE.ERROR_NO_FIND);
+      expect(ds.find(q)).to.eventually.be.rejectedWith('Not implemented');
     });
   });
 
@@ -156,9 +152,7 @@ describe('Datastore', function() {
 
     it('should throw an error if no _commit function exists', function() {
       var ds = new Datastore(ES6Promise, undefined, undefined, {});
-      expect(function() {
-        ds.commit();
-      }).to.throw(DATASTORE.ERROR_NO_COMMIT);
+      expect(ds.commit()).to.eventually.be.rejectedWith('Not implemented');
     });
   });
 
