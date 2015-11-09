@@ -34,7 +34,7 @@ var NoopStore = function NoopStore(promise, ttl, url, models) {
   NoopStore.super_.call(this, promise, ttl, url, models);
 };
 inherits(NoopStore, Datastore);
-NoopStore.prototype.commit = function(ops) {
+NoopStore.prototype.commitTransaction = function(ops) {
   return new this._promise(function(resolve, reject) {
     resolve();
   });
@@ -44,7 +44,7 @@ var FakeStore = function FakeStore(promise, ttl, url, models) {
   FakeStore.super_.call(this, promise, ttl, url, models);
 };
 inherits(FakeStore, Datastore);
-FakeStore.prototype.commit = function(ops) {
+FakeStore.prototype.commitTransaction = function(ops) {
   return new this._promise(function(resolve, reject) {
     var cat = ops[0].value;
     var jsonDSReturn = {
@@ -179,12 +179,12 @@ describe('MemoryDatastore', function() {
 
     it('should implement commit', function() {
       ms.setUpstream(fakeStore);
-      expect(ms.commit()).to.eventually.resolve;
+      expect(ms.commitTransaction()).to.eventually.resolve;
     });
 
     it('should return a promise from commit', function() {
       ms.setUpstream(fakeStore);
-      expect(ms.commit()).to.be.an.instanceof(ES6Promise);
+      expect(ms.commitTransaction()).to.be.an.instanceof(ES6Promise);
     });
   });
 
@@ -1104,14 +1104,16 @@ describe('MemoryDatastore', function() {
     });
 
     it('should send diffs upstream', function(done) {
+      expect(false, 'fail');
       var ms1 = new MemoryDatastore(ES6Promise, undefined, undefined, simpleModels);
       ms1.setUpstream(noopStore);
-      sinon.spy(noopStore, 'commit');
+      sinon.spy(noopStore, 'commitTransaction');
 
       var cat = {color: 'black', age: 2};
+      ms1.beginTransaction();
       ms1.create('cat', cat).then(function(createdCat) {
         cat = createdCat;
-        return ms1.commit();
+        return ms1.commitTransaction();
 
       }).then(function() {
         var op = {
@@ -1119,16 +1121,17 @@ describe('MemoryDatastore', function() {
           path: '/cat/' + cat.id,
           value: cat
         };
-        expect(noopStore.commit.lastCall.args[0], 'create')
+        expect(noopStore.commitTransaction.lastCall.args[0], 'create')
           .to.have.deep.members([op])
           .and.to.have.length(1);
 
         cat.color = 'grey';
+        ms1.beginTransaction();
         return ms1.update('cat', cat);
 
       }).then(function(updatedCat) {
         cat = updatedCat;
-        return ms1.commit();
+        return ms1.commitTransaction();
 
       }).then(function() {
         var op = {
@@ -1136,22 +1139,23 @@ describe('MemoryDatastore', function() {
           path: '/cat/' + cat.id + '/color',
           value: 'grey'
         };
-        expect(noopStore.commit.lastCall.args[0], 'update')
+        expect(noopStore.commitTransaction.lastCall.args[0], 'update')
           .to.have.deep.members([op])
           .and.to.have.length(1);
 
       }).then(function() {
+        ms1.beginTransaction();
         return ms1.delete('cat', cat);
 
       }).then(function() {
-        return ms1.commit();
+        return ms1.commitTransaction();
 
       }).then(function() {
         var op = {
           op: 'remove',
           path: '/cat/' + cat.id
         };
-        expect(noopStore.commit.lastCall.args[0], 'delete (' + JSON.stringify(noopStore.commit.lastCall.args[0]) + ')')
+        expect(noopStore.commitTransaction.lastCall.args[0], 'delete (' + JSON.stringify(noopStore.commitTransaction.lastCall.args[0]) + ')')
           .to.have.deep.members([op])
           .and.to.have.length(1);
 
@@ -1164,9 +1168,10 @@ describe('MemoryDatastore', function() {
       ms1.setUpstream(fakeStore);
 
       var cat = {color: 'blue', age: 3};
+      ms1.beginTransaction();
       ms1.create('cat', cat).then(function(createdCat) {
         cat = createdCat;
-        return ms1.commit();
+        return ms1.commitTransaction();
 
       }).then(function() {
         var q = new Query(ms1, 'cat', cat.id);

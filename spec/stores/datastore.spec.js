@@ -143,16 +143,16 @@ describe('Datastore', function() {
     });
   });
 
-  describe('#commit', function() {
+  describe('#commitTransaction', function() {
     it('should return a promise', function() {
       var foo = new FooStore(ES6Promise, undefined, undefined, {});
-      var promise = foo.commit();
+      var promise = foo.commitTransaction();
       expect(promise).to.be.an.instanceof(ES6Promise);
     });
 
     it('should throw an error if no _commit function exists', function() {
       var ds = new Datastore(ES6Promise, undefined, undefined, {});
-      expect(ds.commit()).to.eventually.be.rejectedWith('Not implemented');
+      expect(ds.commitTransaction()).to.eventually.be.rejectedWith('Not implemented');
     });
   });
 
