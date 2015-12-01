@@ -173,6 +173,9 @@ describe('JsonApiDatastore', function() {
     var pet2 = {id: '2', type: 'cat', name: 'blink', age: 2, owner: '1', flees: []};
     var flee1 = {id: '1', age: 12};
     var flee2 = {id: '2', age: 2};
+    var book1 = {id: '1', type: 'book', genre: 'Literary Fiction', title: 'The Old Man and the Sea'};
+    var book2 = {id: '2', type: 'book', genre: 'Literary Fiction', title: 'For Whom the Bell Tolls'};
+    var book3 = {id: '3', type: 'book', genre: 'Science Fiction', title: 'Enders Game'};
 
     it('should reject unknown models', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, simpleModels);
@@ -284,6 +287,36 @@ describe('JsonApiDatastore', function() {
         expect(result).to.have.property('title');
         expect(result).to.have.property('language');
       });
+    });
+  });
+
+  it('should only fetch literary fiction books', function() {
+    var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
+
+    var q = new Query(store, 'book', {filters: {book: [ {attribute: 'genre'}, {operator: "IN"}, {value: "Literary Fiction"} ]}});
+    store.find(q).then(function(result) {
+      return expect(store.find(q))
+        .to.eventually.contain.deep.members([book1, book3, cat1]);
+    });
+  });
+
+  it('should only fetch enders game book', function() {
+    var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
+
+    var q = new Query(store, 'book', {filters: {book: [ {attribute: 'title'}, {operator: "IN"}, {value: "Enders Game"} ]}});
+    store.find(q).then(function(result) {
+      return expect(store.find(q))
+        .to.eventually.contain.deep.members([book3]);
+    });
+  });
+
+  it('should only fetch literary fiction books', function() {
+    var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
+
+    var q = new Query(store, 'book', {filters: {book: [ {attribute: 'title'}, {operator: "IN"}, {value: "Game of Thrones"} ]}});
+    store.find(q).then(function(result) {
+      return expect(store.find(q))
+        .to.not.contain.deep.members([book3]);
     });
   });
 
