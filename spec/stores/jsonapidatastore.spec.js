@@ -344,11 +344,12 @@ describe('JsonApiDatastore', function() {
       store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
     });
 
-    it('should be able to create root level objects', function() {
+    it('should be able to create root level objects', function(done) {
       var person = {id: 1, name: 'John', bike: null, pets: []};
       store.create('person', {id: 'some-uuid', name: 'John'}).then(function(result) {
-        expect(result.data).to.become(person);
-      })
+        expect(result.data).to.deep.equal(person);
+        done();
+      }).catch(done);
     });
 
     it('should be able to create nested objects', function(done) {
