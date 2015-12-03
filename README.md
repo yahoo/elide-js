@@ -102,6 +102,8 @@ var elide = new Elide(schema, options);
 
 `id` - (optional) the id to find (leave blank for collections)
 
+`opts` - (optional) additional options for querying sparse fields, filtering and includes (see below)
+
 `result` - the object (or array of objects) returned by the query
 ```javascript
 elide.find('company', 1)
@@ -117,6 +119,24 @@ elide.find('company', 1)
     // do something with company 1's projects
   }).catch(function(error) {
     // inspect error to see what went wrong
+  });
+```
+
+##### Options
+
+`include` - an array of additional resource objects related to the primary data. 
+The contents of the array are the property names of the relationships. For example 
+`['authors', 'authors.spouse', 'publisher.bankAccounts']` would include the authors for
+the requested books, the spouses for the included authors, and the bank accounts for the 
+publisher of the requested books.
+
+For instance, you might query for books and include the related author resources as follows:
+
+```javascript
+elide.find('book', {include: ['authors']})
+  .then((results) => {
+    console.log(results.data); // the books
+    console.log(results.included); // the included resources (authors)
   });
 ```
 

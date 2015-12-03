@@ -101,7 +101,8 @@ var webpackConfig = {
   plugins: [],
   stats: {
     colors: true
-  }
+  },
+  devtool: 'source-map'
 };
 
 gulp.task('build:web_min', ['build:web_debug'], function() {
