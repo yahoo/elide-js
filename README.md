@@ -124,7 +124,11 @@ elide.find('company', 1)
 
 ##### Options
 
-`include` - include additional resource objects related to the primary data
+`include` - an array of additional resource objects related to the primary data. 
+The contents of the array are the property names of the relationships. For example 
+`['authors', 'authors.spouse', 'publisher.bankAccounts']` would include the authors for
+the requested books, the spouses for the included authors, and the bank accounts for the 
+publisher of the requested books.
 
 For instance, you might query for books and include the related author resources as follows:
 
