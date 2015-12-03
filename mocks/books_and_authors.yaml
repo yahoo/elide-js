@@ -13,6 +13,62 @@
       file: build/web/elide.js
 
 - request:
+    url: ^/book/$
+    query:
+      fields[book]: title,language,genre,author
+      filter[book.genre][in]: Literary Fiction
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": [
+            {
+              "type": "book",
+              "id": "1",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "title": "The Old Man and the Sea"
+              }
+            },
+            {
+              "type": "book",
+              "id": "2",
+              "attributes": {
+                "genre": "Literary Fiction",
+                "title": "For Whom the Bell Tolls"
+              }
+            }
+          ]
+        }
+
+- request:
+    url: ^/book/$
+    query:
+      fields[book]: title,language,genre,author
+      filter[book.title][in]: Enders Game
+    method: GET
+  response:
+    - status: 200
+      headers:
+        content-type: application/vnd.api+json
+      body: >
+        {
+          "data": [
+            {
+              "type": "book",
+              "id": "3",
+              "attributes": {
+                "genre": "Science Fiction",
+                "title": "Enders Game"
+              }
+            }
+          ]
+        }
+
+- request:
     url: ^/book?/$
     query:
       include: authors
