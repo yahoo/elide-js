@@ -193,7 +193,7 @@ describe('JsonApiDatastore', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
 
       var q = new Query(store, 'person', 1);
-      store.find(q).then((person) =>{
+      store.find(q).then(function(person) {
         expect(person['data']).to.deep.equal(person1);
       })
     });
@@ -202,7 +202,7 @@ describe('JsonApiDatastore', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
 
       var q = new Query(store, 'person', 1).find('pets', 1);
-      store.find(q).then((pet) => {
+      store.find(q).then(function(pet) {
         expect(pet['data']).to.deep.equal(pet1);
       });
     });
@@ -211,13 +211,13 @@ describe('JsonApiDatastore', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
 
       var q = new Query(store, 'person', 1);
-      store.find(q).then((foundPerson) => {
+      store.find(q).then(function(foundPerson) {
         expect(foundPerson['data']).to.deep.equal(person1);
 
         var q = new Query(store, 'pet', 1);
         return store.find(q);
 
-      }).then((foundPet) => {
+      }).then(function(foundPet) {
         expect(foundPet['data']).to.deep.equal(pet1);
 
         done();
@@ -228,7 +228,7 @@ describe('JsonApiDatastore', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, simpleModels);
 
       var q = new Query(store, 'cat');
-      store.find(q).then((pets) => {
+      store.find(q).then(function(pets) {
         expect(pets['data']).to.contain.deep.members([cat1, cat2, cat3]);
       });
     });
@@ -237,7 +237,7 @@ describe('JsonApiDatastore', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
 
       var q = new Query(store, 'person', 1).find('pets');
-      store.find(q).then((pets) => {
+      store.find(q).then(function(pets) {
         expect(pets['data']).to.contain.deep.members([pet1, pet2]);
       });
     });
@@ -246,11 +246,11 @@ describe('JsonApiDatastore', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
 
       var q = new Query(store, 'person', 1);
-      store.find(q).then((foundPerson) => {
+      store.find(q).then(function(foundPerson) {
         var q = new Query(store, 'pet', 1).find('flees');
         return store.find(q);
 
-      }).then((foundFlees) => {
+      }).then(function(foundFlees) {
         expect(foundFlees['data']).to.have.deep.members([flee1, flee2]);
         done();
 
@@ -334,7 +334,7 @@ describe('JsonApiDatastore', function() {
 
     it('should be able to create root level objects', function() {
       var person = {id: 1, name: 'John', bike: null, pets: []};
-      store.create('person', {id: 'some-uuid', name: 'John'}).then((result) => {
+      store.create('person', {id: 'some-uuid', name: 'John'}).then(function(result) {
         expect(result['data']).to.become(person);
       })
     });
@@ -342,10 +342,10 @@ describe('JsonApiDatastore', function() {
     it('should be able to create nested objects', function(done) {
       var pet = {id: 1, name: 'spot', type: 'dog', age: null, owner: 1, flees: []};
       var q = new Query(store, 'person', 1);
-      store.find(q).then((foundPerson) => {
+      store.find(q).then(function(foundPerson) {
         return store.create('pet', {id: 'some-uuid', name: 'spot', type: 'dog', owner: 1});
 
-      }).then((createdPet) => {
+      }).then(function(createdPet) {
         expect(createdPet['data']).to.deep.equal(pet);
         done();
 
@@ -382,14 +382,14 @@ describe('JsonApiDatastore', function() {
 
     it('should be able to update root objects', function() {
       var person = {id: 1, name: 'Cortana', bike: null, pets: [1, 2]};
-      store.update('person', person).then((result) => {
+      store.update('person', person).then(function(result) {
         expect(result['data']).to.become(person);
       });
     });
 
     it('should be able to update nested objects', function() {
       var pet = {id: 1, name: 'rex', type: 'dog', owner: 1, age: null, flees: []};
-      store.update('pet', pet).then((result) => {
+      store.update('pet', pet).then(function(result) {
         expect(result['data']).to.become(pet);
       });
     });
@@ -547,7 +547,7 @@ describe('JsonApiDatastore', function() {
         pets: []
       };
 
-      store.commit(patch.compare(models, objects)).then((objects) => {
+      store.commit(patch.compare(models, objects)).then(function(objects) {
         expect(objects).to.deep.equal([
           {
             type: 'person',
