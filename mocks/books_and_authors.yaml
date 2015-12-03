@@ -13,7 +13,7 @@
       file: build/web/elide.js
 
 - request:
-    url: ^/book/$
+    url: ^/book/?$
     query:
       fields[book]: title,language,genre,author
       filter[book.genre][in]: Literary Fiction
@@ -45,7 +45,7 @@
         }
 
 - request:
-    url: ^/book/$
+    url: ^/book/?$
     query:
       fields[book]: title,language,genre,author
       filter[book.title][in]: Enders Game
@@ -69,7 +69,7 @@
         }
 
 - request:
-    url: ^/book?/$
+    url: ^/book/?$
     query:
       include: authors
     method: GET
@@ -181,7 +181,7 @@
         }
 
 - request:
-    url: ^/book$
+    url: ^/book/?$
     query:
       include: authors
       fields[book]: title,genre
@@ -238,7 +238,7 @@
         }
 
 - request:
-    url: ^/book$
+    url: ^/book/?$
     query:
       fields[book]: title,genre
     method: GET
@@ -277,7 +277,7 @@
         }
 
 - request:
-    url: ^/book$
+    url: ^/book/?$
     query:
       include: authors
       fields[book]: title,genre
@@ -327,7 +327,7 @@
         }
 
 - request:
-    url: ^/book/1$
+    url: ^/book/1/?$
     query:
       fields[book]: title,genre
     method: GET
@@ -348,7 +348,7 @@
         }
 
 - request:
-    url: ^/book/1$
+    url: ^/book/1/?$
     method: GET
   response:
     - status: 200
@@ -378,7 +378,7 @@
         }
 
 - request:
-    url: ^/book/2$
+    url: ^/book/2/?$
     method: GET
   response:
     - status: 200
@@ -408,7 +408,7 @@
         }
 
 - request:
-    url: ^/book/3$
+    url: ^/book/3/?$
     method: GET
   response:
     - status: 200
@@ -438,7 +438,7 @@
         }
 
 - request:
-    url: ^/book?/$
+    url: ^/book/?$
     method: GET
   response:
     - status: 200
@@ -508,7 +508,7 @@
         }
 
 - request:
-    url: ^/author/1$
+    url: ^/author/1/?$
     method: GET
   response:
     - status: 200
@@ -540,7 +540,7 @@
         }
 
 - request:
-    url: ^/author/2$
+    url: ^/author/2/?$
     method: GET
   response:
     - status: 200
@@ -568,7 +568,7 @@
         }
 
 - request:
-    url: ^/author$
+    url: ^/author/?$
     method: GET
   response:
     - status: 200

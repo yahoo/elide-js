@@ -102,7 +102,7 @@ var elide = new Elide(schema, options);
 
 `id` - (optional) the id to find (leave blank for collections)
 
-`opts` - (optional) options for fields and filters
+`opts` - (optional) additional options for querying sparse fields, filtering and includes (see below)
 
 `result` - the object (or array of objects) returned by the query
 ```javascript
@@ -136,6 +136,45 @@ elide.find('company', 1, {filters: {project: [ {attribute: 'name', operator: "in
     }).catch(function(error) {
       // inspect error to see what went wrong
     });
+```
+
+##### Options
+
+`include` - an array of additional resource objects related to the primary data. 
+The contents of the array are the property names of the relationships. For example 
+`['authors', 'authors.spouse', 'publisher.bankAccounts']` would include the authors for
+the requested books, the spouses for the included authors, and the bank accounts for the 
+publisher of the requested books.
+
+For instance, you might query for books and include the related author resources as follows:
+
+```javascript
+elide.find('book', {include: ['authors']})
+  .then((results) => {
+    console.log(results.data); // the books
+    console.log(results.included); // the included resources (authors)
+  });
+```
+
+`fields` - specify which fields should be fetched when returning a resource. If no fields
+are specified, all the attributes in the model will be fetched. For example in books, 
+`[`title`, `authors`, `id`]` returns only authors if the below filter is used
+
+```javascript
+elide.find('book', {fields: ['authors']})
+  .then((results) => {
+    console.log(results.data); // only author information will be available
+  });
+```
+
+`filters` - It is used to query on more than the primary key of an entity. For example in books, 
+`[`title`, `authors`, `id`]`, the below query can be used to return the books with title Harry Potter
+
+```javascript
+elide.find('book', {filters: {book: [ {attribute: 'title', operator: "in", value: "Harry Potter"} ]})
+  .then((results) => {
+    console.log(results.data); // returns books with title Harry Potter
+  });
 ```
 
 #### create(`model`, `state`) → Promise(`result`)
