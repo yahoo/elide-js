@@ -193,30 +193,32 @@ describe('JsonApiDatastore', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
 
       var q = new Query(store, 'person', 1);
-      return expect(store.find(q))
-              .to.eventually.deep.equal(person1);
+      store.find(q).then((person) =>{
+        expect(person['data']).to.deep.equal(person1);
+      })
     });
 
     it('should be able to fetch a single, fully rooted, nested model', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
 
       var q = new Query(store, 'person', 1).find('pets', 1);
-      return expect(store.find(q))
-              .to.eventually.deep.equal(pet1);
+      store.find(q).then((pet) => {
+        expect(pet['data']).to.deep.equal(pet1);
+      });
     });
 
     it('should be able to fetch a single nested model that it can root', function(done) {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
 
       var q = new Query(store, 'person', 1);
-      store.find(q).then(function(foundPerson) {
-        expect(foundPerson).to.deep.equal(person1);
+      store.find(q).then((foundPerson) => {
+        expect(foundPerson['data']).to.deep.equal(person1);
 
         var q = new Query(store, 'pet', 1);
         return store.find(q);
 
-      }).then(function(foundPet) {
-        expect(foundPet).to.deep.equal(pet1);
+      }).then((foundPet) => {
+        expect(foundPet['data']).to.deep.equal(pet1);
 
         done();
       }).catch(done);
@@ -226,28 +228,30 @@ describe('JsonApiDatastore', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, simpleModels);
 
       var q = new Query(store, 'cat');
-      return expect(store.find(q))
-              .to.eventually.contain.deep.members([cat1, cat2, cat3]);
+      store.find(q).then((pets) => {
+        expect(pets['data']).to.contain.deep.members([cat1, cat2, cat3]);
+      });
     });
 
     it('should be able to fetch a collection of fully rooted nested models', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
 
       var q = new Query(store, 'person', 1).find('pets');
-      return expect(store.find(q))
-              .to.eventually.contain.deep.members([pet1, pet2]);
+      store.find(q).then((pets) => {
+        expect(pets['data']).to.contain.deep.members([pet1, pet2]);
+      });
     });
 
     it('should be able to fetch a collection of nested models on a model it can root', function(done) {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, modelsWithLinks);
 
       var q = new Query(store, 'person', 1);
-      store.find(q).then(function(foundPerson) {
+      store.find(q).then((foundPerson) => {
         var q = new Query(store, 'pet', 1).find('flees');
         return store.find(q);
 
-      }).then(function(foundFlees) {
-        expect(foundFlees).to.have.deep.members([flee1, flee2]);
+      }).then((foundFlees) => {
+        expect(foundFlees['data']).to.have.deep.members([flee1, flee2]);
         done();
 
       }).catch(done);
@@ -285,6 +289,41 @@ describe('JsonApiDatastore', function() {
         expect(result).to.have.property('language');
       });
     });
+
+    it('should only fetch title from all books', function() {
+      var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
+
+      var q = new Query(store, 'book', undefined, {fields: {book: ['title', 'genre']}});
+      store.find(q).then(function(books) {
+        for (var i = 0; i < books['data'].length; i++) {
+          expect(books['data'][i]).to.not.have.property('language');
+          expect(books['data'][i]).to.not.have.property('genre');
+          expect(books['data'][i]).to.have.property('title');
+        }
+      });
+    });
+
+    it('should fetch books and authors', function() {
+      var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
+
+      var q = new Query(store, 'book', undefined, {include: ['authors']});
+      store.find(q).then(function(results) {
+        let books = results['data'];
+        let authorIds = [];
+
+        expect(books).to.be.not.empty;
+        for (var i = 0; i < books.length; i++) {
+          authorIds.push(books[i]['id']);
+          expect(books[i]).to.have.property('title');
+        }
+
+        let authors = results['included'];
+        expect(authors).to.be.not.empty;
+        for (let i = 0; i < authors.length; i++) {
+          expect(authorIds).to.have.property(authors[i]['id'])
+        }
+      });
+    });
   });
 
   describe('#create', function() {
@@ -295,18 +334,19 @@ describe('JsonApiDatastore', function() {
 
     it('should be able to create root level objects', function() {
       var person = {id: 1, name: 'John', bike: null, pets: []};
-      return expect(store.create('person', {id: 'some-uuid', name: 'John'}))
-        .to.become(person);
+      store.create('person', {id: 'some-uuid', name: 'John'}).then((result) => {
+        expect(result['data']).to.become(person);
+      })
     });
 
     it('should be able to create nested objects', function(done) {
       var pet = {id: 1, name: 'spot', type: 'dog', age: null, owner: 1, flees: []};
       var q = new Query(store, 'person', 1);
-      store.find(q).then(function(foundPerson) {
+      store.find(q).then((foundPerson) => {
         return store.create('pet', {id: 'some-uuid', name: 'spot', type: 'dog', owner: 1});
 
-      }).then(function(createdPet) {
-        expect(createdPet).to.deep.equal(pet);
+      }).then((createdPet) => {
+        expect(createdPet['data']).to.deep.equal(pet);
         done();
 
       }).catch(done);
@@ -342,14 +382,16 @@ describe('JsonApiDatastore', function() {
 
     it('should be able to update root objects', function() {
       var person = {id: 1, name: 'Cortana', bike: null, pets: [1, 2]};
-      return expect(store.update('person', person))
-        .to.become(person);
+      store.update('person', person).then((result) => {
+        expect(result['data']).to.become(person);
+      });
     });
 
     it('should be able to update nested objects', function() {
       var pet = {id: 1, name: 'rex', type: 'dog', owner: 1, age: null, flees: []};
-      return expect(store.update('pet', pet))
-        .to.become(pet);
+      store.update('pet', pet).then((result) => {
+        expect(result['data']).to.become(pet);
+      });
     });
 
     it('should fail if it cannot root the object', function() {
@@ -505,7 +547,7 @@ describe('JsonApiDatastore', function() {
         pets: []
       };
 
-      store.commit(patch.compare(models, objects)).then(function(objects) {
+      store.commit(patch.compare(models, objects)).then((objects) => {
         expect(objects).to.deep.equal([
           {
             type: 'person',
