@@ -97,10 +97,12 @@ var options = {
 
 var elide = new Elide(schema, options);
 ```
-#### find(`model`, `id`) → Promise(`result`)
+#### find(`model`, `id`, `opts`) → Promise(`result`)
 `model` - the name of the model (or property for nested queries) to search
 
 `id` - (optional) the id to find (leave blank for collections)
+
+`opts` - (optional) options for fields and filters
 
 `result` - the object (or array of objects) returned by the query
 ```javascript
@@ -118,6 +120,22 @@ elide.find('company', 1)
   }).catch(function(error) {
     // inspect error to see what went wrong
   });
+  
+elide.find('company', 1, {fields: {projects: ['name', 'companyid']}})
+  .find('projects')
+    .then(function(projects) {
+      // do something with company 1's projects's name and company id
+    }).catch(function(error) {
+      // inspect error to see what went wrong
+    });
+
+elide.find('company', 1, {filters: {project: [ {attribute: 'name', operator: "in", value: "myapp" }]}})
+  .find('projects')
+    .then(function(projects) {
+      // do something with company 1's only myapp projects
+    }).catch(function(error) {
+      // inspect error to see what went wrong
+    });
 ```
 
 #### create(`model`, `state`) → Promise(`result`)
