@@ -351,7 +351,7 @@ describe('JsonApiDatastore', function() {
         var authors = results['included'];
         expect(authors).to.be.not.empty;
         for (i = 0; i < authors.length; i++) {
-          expect(authorIds).to.have.property(authors[i]['id'])
+          expect(authorIds).to.have.property(authors[i]['name'])
         }
         done();
       }).catch(done);
