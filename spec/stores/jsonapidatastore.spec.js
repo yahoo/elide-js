@@ -173,6 +173,9 @@ describe('JsonApiDatastore', function() {
     var pet2 = {id: '2', type: 'cat', name: 'blink', age: 2, owner: '1', flees: []};
     var flee1 = {id: '1', age: 12};
     var flee2 = {id: '2', age: 2};
+    var book1 = {id: '1', genre: 'Literary Fiction', title: 'The Old Man and the Sea', author: []};
+    var book2 = {id: '2', genre: 'Literary Fiction', title: 'For Whom the Bell Tolls', author: []};
+    var book3 = {id: '3', genre: 'Science Fiction', title: 'Enders Game', author: []};
 
     it('should reject unknown models', function() {
       var store = new JsonApiDatastore(ES6Promise, undefined, baseURL, simpleModels);
@@ -280,7 +283,6 @@ describe('JsonApiDatastore', function() {
         expect(result.data).to.not.have.property('language');
         expect(result.data).to.have.property('title');
         expect(result.data).to.have.property('genre');
-
         done();
       }).catch(done);
     });
@@ -297,6 +299,16 @@ describe('JsonApiDatastore', function() {
       }).catch(done);
     });
 
+    it('should only fetch literary fiction books', function(done) {
+      var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
+
+      var q = new Query(store, 'book', undefined, {filters: {book: [ {attribute: 'genre', operator: "in", value: "Literary Fiction" }]}});
+      store.find(q).then(function(result) {
+        expect(result.data).to.deep.equal([book1, book2])
+        done();
+      }).catch(done);
+    });
+
     it('should only fetch title and genre from all books', function(done) {
       var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
 
@@ -307,7 +319,16 @@ describe('JsonApiDatastore', function() {
           expect(book).to.have.property('genre');
           expect(book).to.have.property('title');
         });
+        done();
+      }).catch(done);
+    });
 
+    it('should only fetch enders game book', function(done) {
+      var store = new JsonApiDatastore(ES6Promise, undefined, booksAndAuthorsURL, booksAndAuthorsModels);
+
+      var q = new Query(store, 'book', undefined, {filters: {book: [ {attribute: 'title', operator: "in", value: "Enders Game"} ]}});
+      store.find(q).then(function(result) {
+        expect(result.data).to.deep.equal([book3]);
         done();
       }).catch(done);
     });
@@ -332,7 +353,6 @@ describe('JsonApiDatastore', function() {
         for (i = 0; i < authors.length; i++) {
           expect(authorIds).to.have.property(authors[i]['id'])
         }
-
         done();
       }).catch(done);
     });

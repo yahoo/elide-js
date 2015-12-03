@@ -97,7 +97,7 @@ var options = {
 
 var elide = new Elide(schema, options);
 ```
-#### find(`model`, `id`) → Promise(`result`)
+#### find(`model`, `id`, `opts`) → Promise(`result`)
 `model` - the name of the model (or property for nested queries) to search
 
 `id` - (optional) the id to find (leave blank for collections)
@@ -120,6 +120,22 @@ elide.find('company', 1)
   }).catch(function(error) {
     // inspect error to see what went wrong
   });
+  
+elide.find('company', 1, {fields: {projects: ['name', 'companyid']}})
+  .find('projects')
+    .then(function(projects) {
+      // do something with company 1's projects's name and company id
+    }).catch(function(error) {
+      // inspect error to see what went wrong
+    });
+
+elide.find('company', 1, {filters: {project: [ {attribute: 'name', operator: "in", value: "myapp" }]}})
+  .find('projects')
+    .then(function(projects) {
+      // do something with company 1's only myapp projects
+    }).catch(function(error) {
+      // inspect error to see what went wrong
+    });
 ```
 
 ##### Options
@@ -137,6 +153,27 @@ elide.find('book', {include: ['authors']})
   .then((results) => {
     console.log(results.data); // the books
     console.log(results.included); // the included resources (authors)
+  });
+```
+
+`fields` - specify which fields should be fetched when returning a resource. If no fields
+are specified, all the attributes in the model will be fetched. For example in books, 
+`[`title`, `authors`, `id`]` returns only authors if the below filter is used
+
+```javascript
+elide.find('book', {fields: ['authors']})
+  .then((results) => {
+    console.log(results.data); // only author information will be available
+  });
+```
+
+`filters` - It is used to query on more than the primary key of an entity. For example in books, 
+`[`title`, `authors`, `id`]`, the below query can be used to return the books with title Harry Potter
+
+```javascript
+elide.find('book', {filters: {book: [ {attribute: 'title', operator: "in", value: "Harry Potter"} ]})
+  .then((results) => {
+    console.log(results.data); // returns books with title Harry Potter
   });
 ```
 
