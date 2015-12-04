@@ -140,11 +140,11 @@ elide.find('company', 1, {filters: {project: [ {attribute: 'name', operator: "in
 
 ##### Options
 
-`include` - an array of additional resource objects related to the primary data. 
-The contents of the array are the property names of the relationships. For example 
-`['authors', 'authors.spouse', 'publisher.bankAccounts']` would include the authors for
-the requested books, the spouses for the included authors, and the bank accounts for the 
-publisher of the requested books.
+`include` - an array of additional resource objects to include in the results that are 
+related to the primary data. The contents of the array are the property names of the 
+relationships. For example `['authors', 'authors.spouse', 'publisher.bankAccounts']` 
+would include the authors for the requested books, the spouses for the included authors, 
+and the bank accounts for the publisher of the requested books.
 
 For instance, you might query for books and include the related author resources as follows:
 
@@ -156,22 +156,36 @@ elide.find('book', {include: ['authors']})
   });
 ```
 
-`fields` - specify which fields should be fetched when returning a resource. If no fields
-are specified, all the attributes in the model will be fetched. For example in books, 
-`[`title`, `authors`, `id`]` returns only authors if the below filter is used
+`fields` - an object that specifies which set of fields to return for each model.
+By default, all attributes and relationships described in the model will be fetched.
+
+For instance, query for the title and authors of books as follows:
 
 ```javascript
-elide.find('book', {fields: ['authors']})
+elide.find('book', {fields: {book: ['title', 'authors']}})
   .then((results) => {
     console.log(results.data); // only author information will be available
   });
 ```
 
-`filters` - It is used to query on more than the primary key of an entity. For example in books, 
-`[`title`, `authors`, `id`]`, the below query can be used to return the books with title Harry Potter
+**Note:** If you specify a fields option, it overrides the fields for **all models**.
+What this means is that if you query for books, include authors and ask for title and 
+authors of books, you will not get any fields back for authors. In addition to
+title and authors of books, you will also have to include name of authors, as follows:
 
 ```javascript
-elide.find('book', {filters: {book: [ {attribute: 'title', operator: "in", value: "Harry Potter"} ]})
+elide.find('book', {include: ['authors'], fields: {book: ['title', 'authors'], author: ['name']}})
+  .then((results) => {
+    console.log(results.data); // only author information will be available
+  });
+```
+
+`filters` - an object that specifies criteria that result types must match.
+
+For instance, query for all books that start with Harry Potter as follows:
+
+```javascript
+elide.find('book', {filters: {book: [ {attribute: 'title', operator: "prefix", value: "Harry Potter"} ]})
   .then((results) => {
     console.log(results.data); // returns books with title Harry Potter
   });
