@@ -104,10 +104,19 @@ var elide = new Elide(schema, options);
 
 `opts` - (optional) additional options for querying sparse fields, filtering and includes (see below)
 
-`result` - the object (or array of objects) returned by the query
+`result` - the object returned by the query. Will have the format: 
+```
+{
+  data: object|array, 
+  included: {
+    model: [], 
+    model2: []
+  }
+}```
+
 ```javascript
 elide.find('company', 1)
-  .then((foundCompany) => {
+  .then((results) => {
     // do something with company 1
   }).catch((error) => {
     // inspect error to see what went wrong
@@ -115,7 +124,7 @@ elide.find('company', 1)
 
 elide.find('company', 1)
   .find('projects')
-  .then(function(projects) {
+  .then(function(results) {
     // do something with company 1's projects
   }).catch(function(error) {
     // inspect error to see what went wrong
@@ -123,7 +132,7 @@ elide.find('company', 1)
   
 elide.find('company', 1, {fields: {projects: ['name', 'companyid']}})
   .find('projects')
-    .then(function(projects) {
+    .then(function(results) {
       // do something with company 1's projects's name and company id
     }).catch(function(error) {
       // inspect error to see what went wrong
@@ -131,7 +140,7 @@ elide.find('company', 1, {fields: {projects: ['name', 'companyid']}})
 
 elide.find('company', 1, {filters: {project: [ {attribute: 'name', operator: "in", value: "myapp" }]}})
   .find('projects')
-    .then(function(projects) {
+    .then(function(results) {
       // do something with company 1's only myapp projects
     }).catch(function(error) {
       // inspect error to see what went wrong
@@ -164,7 +173,7 @@ For instance, query for the title and authors of books as follows:
 ```javascript
 elide.find('book', {fields: {book: ['title', 'authors']}})
   .then((results) => {
-    console.log(results.data); // only author information will be available
+    console.log(results.data); // only book information will be available
   });
 ```
 
@@ -176,7 +185,8 @@ title and authors of books, you will also have to include name of authors, as fo
 ```javascript
 elide.find('book', {include: ['authors'], fields: {book: ['title', 'authors'], author: ['name']}})
   .then((results) => {
-    console.log(results.data); // only author information will be available
+    console.log(results.data); // only book.title and book.authors will be available
+    console.log(results.included); // only author.name will be available
   });
 ```
 
