@@ -28,7 +28,7 @@
   "dependencies": {
     "debug": "~2.2.0",
     "fast-json-patch": "~0.5.2",
-    "superagent": "^1.2.0",
+    "superagent": "^1.7.0",
     "superagent-promise": "^1.0.0",
     "uuid": "~2.0.1"
   },
