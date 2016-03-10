@@ -1,6 +1,7 @@
 {
   "preset": "google",
   "esnext": true,
+  "jsDoc": false,
   "maximumLineLength": {
     "value": 90,
     "tabSize": 2,
