@@ -87,13 +87,13 @@ export default SCHEMA; // or module.exports = SCHEMA; if you prefer
 `schema` - an object as described in [schema](#Schema)
 
 `options` - an object
-`options.Promise` - Your favorite promise implementation
+`options.promise` - Your favorite promise implementation
 ```javascript
 var schema = require('./schema'); // import schema from './schema';
 var Promise = require('es6-promise').Promise // import {Promise} from 'es6-promise';
 
 var options = {
-  Promise: Promise
+  promise: Promise
 };
 
 var elide = new Elide(schema, options);
