@@ -1,3 +1,5 @@
+**Please Note:** This repository has known security vulnerabilities. Use at your own risk!
+
 [![Stories in Ready](https://badge.waffle.io/yahoo/elide-js.png?label=ready&title=Ready)](https://waffle.io/yahoo/elide-js)
 [![Build Status](https://travis-ci.org/yahoo/elide-js.svg?branch=master)](https://travis-ci.org/yahoo/elide-js) [![npm version](https://badge.fury.io/js/elide-js.svg)](https://badge.fury.io/js/elide-js) [![Code Climate](https://codeclimate.com/github/yahoo/elide-js/badges/gpa.svg)](https://codeclimate.com/github/yahoo/elide-js)
 
