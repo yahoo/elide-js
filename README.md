@@ -32,7 +32,9 @@ Elide is tested on:
     - [create](#create)
     - [update](#update)
     - [delete](#delete)
-    - [commit](#commit)
+    - [beginTransaction](#beginTransaction)
+    - [commitTransaction](#commitTransaction)
+    - [rollbackTransaction](#rollbackTransaction)
 
 ### Schema
 The schema is a javascript object composed of two sections: `stores` and `models`.
@@ -259,13 +261,32 @@ elide.delete('company', {id: 1})
   });
 ```
 
-#### commit() → Promise()
+#### beginTransaction() → Promise()
+Lets stores know that a transaction is beginning.
+```javascript
+elide.beginTransaction()
+  .then(function() {
+    // do lots of awesome stuff in a batch
+    // or mark the UI as ready for updates
+  })
+```
+
+#### commitTransaction() → Promise()
 Commit receives no value but returns a Promise so errors can be caught
 ```javascript
-elide.commit()
+elide.commitTransaction()
   .then(() => {
     // there is no value received
   }).catch((error) => {
     // inspect error to see what went wrong
   });
+```
+
+#### rollbackTransaction() → Promise()
+Lets stores know that the current transaction was cancelled
+```javascript
+elide.rollbackTransaction()
+  .then(function() {
+    // reset the UI (or preform the cancel button action)
+  })
 ```

@@ -2,8 +2,11 @@
   "name": "elide-js",
   "description": "Talk to a JSON API compliant server",
   "license": "Apache-2.0",
-  "authors": "Clay Reimann <clayreimann@yahoo-inc.com>",
-  "contributors": [],
+  "authors": "Clay Reimann <clayreimann@gmail.com>",
+  "contributors": [
+    "Arun Thomas <arunthomas207@gmail.com>",
+    "Shad Sharma <shadanan@gmail.com>"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/yahoo/elide-js.git"

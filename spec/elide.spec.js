@@ -113,8 +113,8 @@ describe('Elide', function() {
       }).then(done).catch(done);
     });
 
-    it('should have #commit', function() {
-      expect(elide.commit).to.be.a('function');
+    it('should have #commitTransaction', function() {
+      expect(elide.commitTransaction).to.be.a('function');
     });
   });
 

@@ -487,7 +487,7 @@ describe('JsonApiDatastore', function() {
 
   });
 
-  describe('#commit', function() {
+  describe('#commitTransaction', function() {
     var store;
     var objects;
     var models;
@@ -568,7 +568,7 @@ describe('JsonApiDatastore', function() {
 
       var q = new Query(store, 'person', 1);
       store.find(q).then(function(person) {
-        return store.commit(patch.compare(models, objects));
+        return store.commitTransaction(patch.compare(models, objects));
       }).then(done).catch(done);
     });
 
@@ -582,7 +582,7 @@ describe('JsonApiDatastore', function() {
         pets: []
       };
 
-      store.commit(patch.compare(models, objects)).then(function(objects) {
+      store.commitTransaction(patch.compare(models, objects)).then(function(objects) {
         expect(objects).to.deep.equal([
           {
             type: 'person',
